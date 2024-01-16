@@ -18,7 +18,7 @@ class Programm
        Console.WriteLine("Все автомобили:");
          DisplayCars(allCars);
 
-        // Создаем вторую коллекцию с автомобилями младше 2018 года и выводим на экра
+        // Создаем вторую коллекцию с автомобилями младше 2018 года и выводим на экран
         List<Car> carsYoungerThan2018 = GetCarsYoungerThan2018(allCars);
         Console.WriteLine($"\nАвтомобили младше 2018 года:");
         DisplayCars(carsYoungerThan2018);
@@ -37,18 +37,13 @@ class Programm
         {
             connection.Open();
 
-            // Создаем базу данных "Cars", если ее не существует
+           
             string createDatabaseQuery = "IF NOT EXISTS (SELECT 1 FROM sys.databases WHERE name = 'Cars') CREATE DATABASE Cars";
             ExecuteNonQuery(connection, createDatabaseQuery);
-
-            // Используем базу данных "Cars"
             connection.ChangeDatabase("Cars");
-
-            // Создаем таблицу "CarTable", если ее не существует
             string createTableQuery = "IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'CarTable') " +
                                       "CREATE TABLE CarTable (Id INT PRIMARY KEY, Model NVARCHAR(50), Year INT)";
             ExecuteNonQuery(connection, createTableQuery);
-
             connection.Close();
         }
     }
@@ -60,15 +55,9 @@ class Programm
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();
-
-            // Убедимся, что мы в базе данных "Cars"
             connection.ChangeDatabase("Cars");
-
-            // Очищаем таблицу перед вставкой новых данных
             string clearTableQuery = "DELETE FROM CarTable";
             ExecuteNonQuery(connection, clearTableQuery);
-
-            // Заполняем таблицу данными
             string insertDataQuery = "INSERT INTO CarTable (Id, Model, Year) VALUES " +
                                      "(1, 'Toyota Camry', 2022), " +
                                      "(2, 'Honda Accord', 2019), " +
@@ -90,10 +79,8 @@ class Programm
         {
             connection.Open();
 
-            // Убеждаемся, что мы в базе данных "Cars"
             connection.ChangeDatabase("Cars");
 
-            // Получаем данные из таблицы CarTable
             string selectQuery = "SELECT * FROM CarTable";
             using (SqlCommand command = new SqlCommand(selectQuery, connection))
             {
